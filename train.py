@@ -8,7 +8,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 import rnn
 
-def predict_sin(net,test_input,index,pre_num=1000,input_size=3):
+def predict_sin(net,test_input,index,pre_num=50,input_size=3):
     """
     通过传入的test_input进行后续pre_num个点的预测，并将预测结果保存下来
     :param net: 使用的模型
@@ -37,7 +37,7 @@ def predict_sin(net,test_input,index,pre_num=1000,input_size=3):
         plt.plot(np.arange(delimer, delimer + pre_num), y[i][delimer:],
                  linewidth=2.0, linestyle=":",color=colors[i])
 
-    plt.savefig('my_pre_sin_function %d.pdf' % index)
+    plt.savefig('%dth_train_result.jpg' % index)
     plt.close()
 
 
