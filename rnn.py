@@ -52,8 +52,6 @@ class SenNet(nn.Module):
 
         return out
 
-import matplotlib.pyplot as plt
-import numpy as np
 # 预测sin函数的模型
 class SinNet(nn.Module):
     def __init__(self,input_size,hidden_size):
