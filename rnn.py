@@ -77,26 +77,13 @@ class SinNet(nn.Module):
         outputs = torch.stack(outputs,1).squeeze(2)
         return outputs
 
-    def predict(self,input,predict_num,delimer):
+    def predict(self,input,predict_num):
         """
         用户传入input和要预测的个数，返回给用户预测值
         :param input(tensor[n,m]):预测数据的依据
         :param predict_num(int):被预测出的数据个数
         :return(tensor[n,m+predict_num]):根据input预测出来的数据
         """
-        # x=[]
-        # y=[]
-        # colors = ['r','b','c','y','c','m','lime','silver','brown','chartreuse']
-        # for i in range(input.size(0)):
-        #     # print(len(np.arange(delimer)),len(y[i]))
-        #     # print(len(np.arange(delimer, delimer + pre_num)),len(y[i][delimer:]))
-        #     x.append(i)	# 添加i到x轴的数据中
-        #     plt.xlabel('x', fontsize=25)
-        #     plt.ylabel('y', fontsize=25)
-        #     plt.plot(np.arange(delimer), y[i][:delimer], linewidth=2.0,color=colors[i])
-        #     plt.pause(0.001)  # 暂停一段时间，不然画的太快会卡住显示不出来
-	    #     #plt.ioff()  # 关闭画图窗口
-
         outputs = self.forward(input)
         for i in range(predict_num):
             ht,ct = self.lstm1(outputs[:,-self.input_size:])

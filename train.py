@@ -36,7 +36,6 @@ def predict_sin(net,test_input,index,pre_num=1000,input_size=3):
         plt.plot(np.arange(delimer), y[i][:delimer], linewidth=2.0,color=colors[i])
         plt.plot(np.arange(delimer, delimer + pre_num), y[i][delimer:],
                  linewidth=2.0, linestyle=":",color=colors[i])
-        print(y[i][:delimer])
 
     plt.savefig('my_pre_sin_function %d.pdf' % index)
     plt.close()
