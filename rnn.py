@@ -52,6 +52,8 @@ class SenNet(nn.Module):
 
         return out
 
+import matplotlib.pyplot as plt
+import numpy as np
 # 预测sin函数的模型
 class SinNet(nn.Module):
     def __init__(self,input_size,hidden_size):
@@ -77,19 +79,34 @@ class SinNet(nn.Module):
         outputs = torch.stack(outputs,1).squeeze(2)
         return outputs
 
-    def predict(self,input,predict_num):
+    def predict(self,input,predict_num,delimer):
         """
         用户传入input和要预测的个数，返回给用户预测值
         :param input(tensor[n,m]):预测数据的依据
         :param predict_num(int):被预测出的数据个数
         :return(tensor[n,m+predict_num]):根据input预测出来的数据
         """
+        # x=[]
+        # y=[]
+        # colors = ['r','b','c','y','c','m','lime','silver','brown','chartreuse']
+        # for i in range(input.size(0)):
+        #     # print(len(np.arange(delimer)),len(y[i]))
+        #     # print(len(np.arange(delimer, delimer + pre_num)),len(y[i][delimer:]))
+        #     x.append(i)	# 添加i到x轴的数据中
+        #     plt.xlabel('x', fontsize=25)
+        #     plt.ylabel('y', fontsize=25)
+        #     plt.plot(np.arange(delimer), y[i][:delimer], linewidth=2.0,color=colors[i])
+        #     plt.pause(0.001)  # 暂停一段时间，不然画的太快会卡住显示不出来
+	    #     #plt.ioff()  # 关闭画图窗口
+
         outputs = self.forward(input)
         for i in range(predict_num):
             ht,ct = self.lstm1(outputs[:,-self.input_size:])
             ht,ct = self.lstm2(ht)
             output = self.linear(ht)
             outputs = torch.cat([outputs,output],dim=1)
-
+            #y = output.cpu().detach().numpy()
+            #print(y[0])
+        
         return outputs
 

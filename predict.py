@@ -23,36 +23,55 @@ def predict_sin(net,input,pre_num,input_size):
     delimer = input.size(1)-input_size+1
 
     with torch.no_grad():
-        pre = net.predict(input, pre_num)
+        pre = net.predict(input, pre_num,delimer)
         y = pre.cpu().detach().numpy()
+    #     print(y[0])
 
-    # 画结果
+    ax=[]
+    ay=[]
+    plt.clf()    #清除刷新前的图表，防止数据量过大消耗内存
     plt.figure(figsize=(35, 15))
     plt.title("Predict values for sin function", fontsize=25)
     plt.xlabel('x', fontsize=25)
     plt.ylabel('y', fontsize=25)
-
     colors = ['r','b','c','y','c','m','lime','silver','brown','chartreuse']
+   
     for i in range(input.size(0)):
-        # print(len(np.arange(delimer)),len(y[i]))
+        # print(len(np.arange(delimer)),len(y[i]))WW
         # print(len(np.arange(delimer, delimer + pre_num)),len(y[i][delimer:]))
-        plt.plot(np.arange(delimer), y[i][:delimer], linewidth=2.0,color=colors[i])
-        plt.plot(np.arange(delimer, delimer + pre_num), y[i][delimer:],
-                 linewidth=2.0, linestyle=":",color=colors[i])
-        #print(y[i][:delimer])
+        for j in range(delimer + pre_num):
+            #plt.clf()
+            ax.append(j)
+            ay.append(y[i][j])
+            if j < delimer:
+                plt.plot(ax,ay,linewidth=2.0,color=colors[i])
+            else:
+                plt.plot(ax,ay,linewidth=2.0,linestyle=":",color=colors[i])
+            plt.pause(0.001)  
+            plt.ioff()
+            #plt.plot(np.arange(delimer), y[i][:delimer], linewidth=2.0,color=colors[i])
+            #plt.plot(np.arange(delimer, delimer + pre_num), y[i][delimer:],linewidth=2.0, linestyle=":",color=colors[i])# predict node
 
-    #plt.show()
-
+    # # 画结果
+    # plt.figure(figsize=(35, 15))
+    # plt.title("Predict values for sin function", fontsize=25)
+    # plt.xlabel('x', fontsize=25)
+    # plt.ylabel('y', fontsize=25)
+    # colors = ['r','b','c','y','c','m','lime','silver','brown','chartreuse']
+    # for i in range(input.size(0)):
+    #     # print(len(np.arange(delimer)),len(y[i]))
+    #     # print(len(np.arange(delimer, delimer + pre_num)),len(y[i][delimer:]))
+    #     plt.plot(np.arange(delimer), y[i][:delimer], linewidth=2.0,color=colors[i])
+    #     plt.plot(np.arange(delimer, delimer + pre_num), y[i][delimer:],linewidth=2.0, linestyle=":",color=colors[i])# predict node
     plt.savefig('my_pre_sin_function.jpg')
-    #plt.close()
 
 
 if __name__ == '__main__':
     # 加载数据
     T = 20
-    L = 1000
+    L = 50 #
     N = 1 # 
-    #plt.ion()
+    plt.ion()
     count = 0
     while count <= 1:
 
@@ -72,7 +91,7 @@ if __name__ == '__main__':
         #sinnet = sinnet
         #sinnet.double()
 
-        pre_num = 100
+        pre_num = 50
         predict_sin(sinnet,data,pre_num,input_size)
 
         count+=1
