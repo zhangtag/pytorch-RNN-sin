@@ -8,7 +8,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 import rnn
 
-def predict_sin(net,test_input,index,pre_num=1000,input_size=3):
+def predict_sin(net,test_input,index,pre_num=50,input_size=3):
     """
     通过传入的test_input进行后续pre_num个点的预测，并将预测结果保存下来
     :param net: 使用的模型
@@ -37,13 +37,13 @@ def predict_sin(net,test_input,index,pre_num=1000,input_size=3):
         plt.plot(np.arange(delimer, delimer + pre_num), y[i][delimer:],
                  linewidth=2.0, linestyle=":",color=colors[i])
 
-    plt.savefig('my_pre_sin_function %d.pdf' % index)
+    plt.savefig('./train/%dth_train_result.jpg' % index)
     plt.close()
 
 
 if __name__ == '__main__':
     # 加载数据
-    data = torch.from_numpy(torch.load('traindata.pt'))
+    data = torch.from_numpy(torch.load('train_raw_data.pt'))
 
     # 通过设置 input_size 决定如何怎样预测：
     # 如果input_size = 3,则使用 n-2,n-1,n -> n+1
@@ -51,20 +51,20 @@ if __name__ == '__main__':
     input_size = 3
 
     # 后 97 行作为训练数据
-    train_input = Variable(data[3:,:-1]).cuda()            # 取前999列进行预测
-    train_target = Variable(data[3:,input_size:]).cuda()   # 取后（length - input_size）个作为比对的target
+    train_input = Variable(data[3:,:-1])            # 取前999列进行预测
+    train_target = Variable(data[3:,input_size:])   # 取后（length - input_size）个作为比对的target
     # 前 3 行作为测试数据
-    test_input = data[:3,:-1].cuda()
-    test_target = data[:3,input_size:].cuda()
+    test_input = data[:3,:-1]
+    test_target = data[:3,input_size:]
 
     # 初始化训练用到的模型,损失函数,优化器
+
     sinnet = rnn.SinNet(input_size,50)
-    sinnet = sinnet.cuda()
     sinnet.double()
-    loss_fc = nn.MSELoss().cuda()
+    loss_fc = nn.MSELoss()
     optimizer = optim.LBFGS(sinnet.parameters(),lr = 0.8)
 
-    # 开始训练
+    # # 开始训练
     for i in range(15):
         print('step:',i)
         def closure():
@@ -80,6 +80,4 @@ if __name__ == '__main__':
         # 每次优化后都进行预测
         predict_sin(sinnet,test_input,i,input_size=input_size)
 
-    # torch.save(sinnet,'predict_sin_func.pkl') # 将训练的网络保存下来
-
-    # net = torch.load('sinnet.pkl')
+    torch.save(sinnet,'predict_model.pkl') # 将训练的网络保存下来

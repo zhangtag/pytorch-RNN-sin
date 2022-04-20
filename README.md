@@ -1,4 +1,7 @@
+[源仓库](https://github.com/MaXuSun/time_sequence_predict.git)
+
 # 时序预测
+
 使用pytorch实现的一个rnn,用来对sine函数进行预测
 
 # 文件目录

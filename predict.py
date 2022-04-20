@@ -1,4 +1,5 @@
 # 本文件是预测sin函数的main文件
+from os import system
 from time import sleep
 import torch.optim as optim
 from torch.autograd import Variable
@@ -23,17 +24,17 @@ def predict_sin(net,input,pre_num,input_size):
     delimer = input.size(1)-input_size+1
 
     with torch.no_grad():
-        pre = net.predict(input, pre_num,delimer)
+        pre = net.predict(input, pre_num)
         y = pre.cpu().detach().numpy()
     #     print(y[0])
 
     ax=[]
     ay=[]
     plt.clf()    #清除刷新前的图表，防止数据量过大消耗内存
-    plt.figure(figsize=(35, 15))
-    plt.title("Predict values for sin function", fontsize=25)
-    plt.xlabel('x', fontsize=25)
-    plt.ylabel('y', fontsize=25)
+    #plt.figure(figsize=(35, 15))
+    plt.title("Predict values for sin function", fontsize=15)
+    #plt.xlabel('x', fontsize=25)
+    #plt.ylabel('y', fontsize=25)
     colors = ['r','b','c','y','c','m','lime','silver','brown','chartreuse']
    
     for i in range(input.size(0)):
@@ -55,25 +56,25 @@ def predict_sin(net,input,pre_num,input_size):
     # # 画结果
     # plt.figure(figsize=(35, 15))
     # plt.title("Predict values for sin function", fontsize=25)
-    # plt.xlabel('x', fontsize=25)
-    # plt.ylabel('y', fontsize=25)
+    # plt.xlabel('x', fontsize=30)
+    # plt.ylabel('y', fontsize=90)
     # colors = ['r','b','c','y','c','m','lime','silver','brown','chartreuse']
     # for i in range(input.size(0)):
     #     # print(len(np.arange(delimer)),len(y[i]))
     #     # print(len(np.arange(delimer, delimer + pre_num)),len(y[i][delimer:]))
     #     plt.plot(np.arange(delimer), y[i][:delimer], linewidth=2.0,color=colors[i])
     #     plt.plot(np.arange(delimer, delimer + pre_num), y[i][delimer:],linewidth=2.0, linestyle=":",color=colors[i])# predict node
-    plt.savefig('my_pre_sin_function.jpg')
+    plt.savefig('pre_result.jpg')
 
 
 if __name__ == '__main__':
     # 加载数据
     T = 20
-    L = 50 #
+    L = 100 #
     N = 1 # 
     plt.ion()
     count = 0
-    while count <= 1:
+    while count <= 0:
 
         x = np.empty((N, L), 'int64')
         x[:] = np.array(range(L)) + np.random.randint(-4 * T, 4 * T, N).reshape(N, 1) 
@@ -86,13 +87,13 @@ if __name__ == '__main__':
         input_size = 3
 
         # 初始化训练用到的模型,损失函数,优化器
-
-        sinnet = torch.load('predict_sin_func.pkl')
-        #sinnet = sinnet
-        #sinnet.double()
+        sinnet = rnn.SinNet(input_size,50)
+        sinnet = torch.load('predict_model.pkl', map_location=torch.device('cpu'))
+        sinnet.double()
 
         pre_num = 50
         predict_sin(sinnet,data,pre_num,input_size)
 
         count+=1
         sleep(1)
+    # system("pause")
