@@ -37,3 +37,12 @@
 
 
 
+# 效果
+
+14次训练效果
+
+![img](./train/14th_train_result.jpg)
+
+预测效果
+
+![img](./pre_result.jpg)
